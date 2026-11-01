@@ -161,11 +161,13 @@ if ($minEff -eq $maxEff) {
 Write-Host "`n[2/3] Verifying AvsAffinity.dll Binary Artifacts..." -ForegroundColor Cyan
 
 $candidates = @(
-    $DllPath,
-    "$PSScriptRoot\..\x64\Release\AvsAffinity.dll",
-    "$PSScriptRoot\..\ARM64\Release\AvsAffinity.dll",
-    "$PSScriptRoot\..\build\Release\AvsAffinity.dll"
-) | Where-Object { $_ -and (Test-Path $_) }
+    @(
+        $DllPath,
+        "$PSScriptRoot\..\x64\Release\AvsAffinity.dll",
+        "$PSScriptRoot\..\ARM64\Release\AvsAffinity.dll",
+        "$PSScriptRoot\..\build\Release\AvsAffinity.dll"
+    ) | Where-Object { $_ -and (Test-Path $_) }
+)
 
 if ($candidates.Count -eq 0) {
     Write-Host "  [WARN] AvsAffinity.dll binary not found in standard build directories." -ForegroundColor Yellow
