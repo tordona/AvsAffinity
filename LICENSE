@@ -1,0 +1,38 @@
+MIT License
+
+Copyright (c) 2026 tordona
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+--------------------------------------------------------------------------------
+Third-Party Component Licensing:
+
+The header file 'include/avisynth.h' and supporting headers in 'include/avs/'
+are Copyright (C) Ben Rudiak-Gould, Klaus Post, Ian Brabham, and the AviSynth+
+Project contributors.
+
+These headers are distributed under the terms of the GNU General Public License
+version 2.0 (GPLv2) with the official AviSynth Plugin Interface Exception:
+
+"As a special exception, the copyright holders of Avisynth give you permission
+to link Avisynth with independent modules that communicate with Avisynth solely
+through the interfaces defined in avisynth.h, regardless of the license terms of
+these independent modules, and to copy and distribute the resulting combined
+work under terms of your choice..."
+--------------------------------------------------------------------------------

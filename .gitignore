@@ -1,0 +1,30 @@
+# Build directories
+bin/
+obj/
+x64/
+ARM64/
+Win32/
+build/
+out/
+
+# Visual Studio files
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Compiled binaries & artifacts
+*.obj
+*.o
+*.lib
+*.a
+*.exp
+*.dll
+*.so
+*.dylib
+*.pdb
+*.ilk
+*.idb
+*.tlog
+*.lastbuildstate

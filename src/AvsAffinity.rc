@@ -1,0 +1,39 @@
+#include <windows.h>
+#include "version.h"
+
+LANGUAGE LANG_ENGLISH, SUBLANG_NEUTRAL
+#pragma code_page(1252)
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION FILEVERSION_VAL
+ PRODUCTVERSION FILEVERSION_VAL
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x40004L
+ FILETYPE 0x2L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040004b0"
+        BEGIN
+            VALUE "Comments", "CPU Performance Core Thread Affinity Plugin for AviSynth+"
+            VALUE "CompanyName", "tordona"
+            VALUE "FileDescription", "AvsAffinity plugin for AviSynth+ API"
+            VALUE "FileVersion", FILEVERSION_STR
+            VALUE "InternalName", "AvsAffinity"
+            VALUE "LegalCopyright", "Copyright (C) 2026 tordona (MIT License)"
+            VALUE "OriginalFilename", "AvsAffinity.dll"
+            VALUE "ProductName", "AvsAffinity"
+            VALUE "ProductVersion", PRODUCTVERSION_STR
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x400, 1200
+    END
+END
