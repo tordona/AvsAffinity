@@ -1,0 +1,46 @@
+name: CI & Build Verification
+
+on:
+  push:
+    branches: [ "main" ]
+    tags: [ "v*" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build & Test (${{ matrix.platform }})
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [ x64, ARM64 ]
+        configuration: [ Release ]
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Add MSBuild to PATH
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Build Target (${{ matrix.platform }})
+        run: |
+          msbuild AvsAffinity.vcxproj /t:Rebuild /p:Configuration=${{ matrix.configuration }} /p:Platform=${{ matrix.platform }} /v:m /nologo
+
+      - name: Run Test Suite
+        shell: pwsh
+        run: |
+          .\tests\Test-AvsAffinity.ps1 -DllPath "${{ matrix.platform }}\${{ matrix.configuration }}\AvsAffinity.dll"
+
+      - name: Upload Binary Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: AvsAffinity-${{ matrix.platform }}-${{ matrix.configuration }}
+          path: |
+            ${{ matrix.platform }}\${{ matrix.configuration }}\AvsAffinity.dll
+            ${{ matrix.platform }}\${{ matrix.configuration }}\AvsAffinity.pdb

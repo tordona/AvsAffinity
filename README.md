@@ -60,6 +60,18 @@ Prefetch(8, 4)
 
 ---
 
+## Installation & Documentation
+
+Precompiled binaries for Windows `x64` and `ARM64` are distributed via [GitHub Releases](https://github.com/tordona/AvsAffinity/releases) alongside dedicated `.sha256` checksum manifests.
+
+* **Installation Guide:** See [`docs/INSTALL.md`](docs/INSTALL.md) for detailed setup across:
+  * Standard AviSynth+ autoload directories (`plugins64`/`plugins+`).
+  * Real-time media players (PotPlayer, MPC-HC, MPC-BE).
+  * Headless and batch encoding pipelines (`ffmpeg`, `avs2pipemod`, `vspipe`).
+* **Release Packaging:** Run `scripts/New-ReleasePackage.ps1` to compile, validate PE machine headers and version resource strings, execute regression tests, and package release archives.
+
+---
+
 ## Behavior on Homogeneous Processors
 
 On processors where all cores share identical architecture (e.g. Intel Processor N100 all-E-core CPUs, AMD Ryzen 5000/7000/9000 standard CCDs, Intel 10th/11th Gen, or Snapdragon X Elite/Plus), Windows reports `EfficiencyClass = 0` for all logical processors.
