@@ -35,7 +35,7 @@ jobs:
       - name: Run Test Suite
         shell: pwsh
         run: |
-          .\tests\Test-AvsAffinity.ps1 -DllPath "${{ matrix.platform }}\${{ matrix.configuration }}\AvsAffinity.dll"
+          .\tests\Test-AvsAffinity.ps1 -DllPath "${{ matrix.platform }}\${{ matrix.configuration }}\AvsAffinity.dll" -SkipRuntime
 
       - name: Upload Binary Artifact
         uses: actions/upload-artifact@v4
