@@ -11,9 +11,9 @@ On hybrid processor topologies, the operating system thread scheduler (e.g. Wind
 Unlike process-level affinity tools (such as Windows `start /affinity` or Process Lasso), which force the **entire application**—including audio decoding, UI event loops, and Direct3D presentation swapchains—onto P-cores, `AvsAffinity` operates as an **AviSynth Clip Filter**:
 
 * Intercepts `GetFrame()` on each executing `Prefetch` worker thread.
-* Invokes Win32 `SetThreadAffinityMask` using thread-local caching (executing the system call exactly once per worker thread lifetime).
-* **Confinement without Blast Radius:** Video compute threads are restricted strictly to Performance cores, while host audio, subtitle, and UI presentation threads remain free to schedule across Efficiency cores.
-* **Zero State Leakage:** Thread affinity terminates automatically with the AviSynth environment upon playlist changes or video close events.
+* Invokes Win32 `SetThreadAffinityMask` once per worker thread per filter instance.
+* **Targeted Thread Affinity:** Video compute threads are restricted to Performance cores, while host audio, subtitle, and UI presentation threads remain unconstrained.
+* **Scoped Affinity Restoration:** Previous thread affinity masks are restored when the filter instance is destroyed.
 
 ---
 
@@ -34,7 +34,7 @@ Pins all AviSynth+ worker threads traversing the filter graph to Performance cor
 
 Introspection function that returns the detected Performance core bitmask as a hexadecimal string (e.g. `"0x00FF"` or `"0x0"` on homogeneous CPUs).
 
-### `SetProcessAffinity(string "mask") -> bool`
+### `SetProcessAffinity(string "mask", bool "strictPrime") -> bool`
 
 Optional utility to set the global process affinity mask for command-line batch encoding pipelines (e.g. `ffmpeg` or `avs2pipemod`).
 
@@ -42,7 +42,7 @@ Optional utility to set the global process affinity mask for command-line batch 
 
 ## Script Integration & Fallback Pattern
 
-To ensure scripts remain 100% backward-compatible on systems where `AvsAffinity.dll` is not installed, use AviSynth's built-in `FunctionExists()` check:
+To maintain compatibility on systems where `AvsAffinity.dll` is not installed, use AviSynth's built-in `FunctionExists()` check:
 
 ```avs
 # Frame interpolation / filtering pipeline
@@ -76,7 +76,7 @@ Precompiled binaries for Windows `x64` and `ARM64` are distributed via [GitHub R
 
 On processors where all cores share identical architecture (e.g. Intel Processor N100 all-E-core CPUs, AMD Ryzen 5000/7000/9000 standard CCDs, Intel 10th/11th Gen, or Snapdragon X Elite/Plus), Windows reports `EfficiencyClass = 0` for all logical processors.
 
-`AvsAffinity` automatically detects `minClass == maxClass` and evaluates to a **safe no-op** (`mask = 0x0`). Affinity remains unconstrained and the pipeline runs across all available cores without error.
+`AvsAffinity` detects `minClass == maxClass` and acts as a **no-op** (`mask = 0x0`). Affinity remains unconstrained and the pipeline runs across all available cores.
 
 ---
 

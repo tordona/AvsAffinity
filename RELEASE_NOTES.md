@@ -1,6 +1,6 @@
-# AvsAffinity v1.0.0 Release Notes
+# AvsAffinity v1.1.0 Release Notes
 
-Initial public release of **AvsAffinity**, an open-source AviSynth+ clip filter that enforces CPU Performance core (P-core) thread affinity for multi-threaded `Prefetch()` pipelines across hybrid processor topologies.
+Release of **AvsAffinity**, an open-source AviSynth+ clip filter that enforces CPU Performance core (P-core) thread affinity for multi-threaded `Prefetch()` pipelines across hybrid processor topologies.
 
 ---
 
@@ -8,11 +8,11 @@ Initial public release of **AvsAffinity**, an open-source AviSynth+ clip filter 
 
 On hybrid processor topologies (e.g. Intel Alder/Raptor/Arrow Lake, Snapdragon ARM64, AMD Zen 4c/5c), the Windows thread scheduler can migrate compute-intensive video worker threads onto low-IPC Efficiency cores (E-cores). For real-time frame interpolation (e.g. 24 fps -> 60 fps) and heavy video filtering, this migration introduces frame presentation jitter, increased 1% low frame latency, and pipeline starvation.
 
-`AvsAffinity` solves this problem at the AviSynth clip filter level:
-* **Worker Confinement:** Uses Win32 `SetThreadAffinityMask` on worker threads during `GetFrame()` traversal with thread-local caching, executing exactly once per worker thread lifetime.
-* **Preserved Host Concurrency:** Host media player threads—including audio decoding, UI event loops, DXVA video acceleration, and Direct3D swapchain presentation—remain unconstrained and free to run on Efficiency cores.
-* **Zero State Leakage:** Thread affinity terminates automatically with the AviSynth environment upon playlist transitions or file close events.
-* **Homogeneous Processor Bypass:** When executed on processors with uniform core efficiency (e.g. Intel N100 all-E-core CPUs, standard AMD Ryzen CCDs, Snapdragon X Elite), `EfficiencyClass` is identical across all logical processors. The filter detects this and executes a safe no-op (`mask = 0x0`) without error or modification to system affinity.
+`AvsAffinity` applies thread affinity at the AviSynth clip filter level:
+* **Worker Thread Affinity:** Calls Win32 `SetThreadAffinityMask` on worker threads during `GetFrame()` traversal once per worker thread per filter instance.
+* **Preserved Host Concurrency:** Host media player threads—including audio decoding, UI event loops, DXVA video acceleration, and Direct3D swapchain presentation—remain unconstrained.
+* **Scoped Affinity Restoration:** Previous thread affinity masks are restored when the filter instance is destroyed upon playlist transitions or file close events.
+* **Homogeneous Processor Bypass:** On processors with uniform core efficiency (e.g. Intel N100 all-E-core CPUs, standard AMD Ryzen CCDs, Snapdragon X Elite), `EfficiencyClass` is identical across all logical processors. The filter detects this and acts as a no-op (`mask = 0x0`) without modifying thread affinity.
 
 ---
 
@@ -27,7 +27,7 @@ Intercepts `GetFrame()` to isolate executing AviSynth+ worker threads to Perform
 ### `GetPCoreMask(bool "strictPrime") -> string`
 Introspection function returning the detected Performance core bitmask as a hexadecimal string (e.g. `"0x00FF"` or `"0x0"` on homogeneous CPUs).
 
-### `SetProcessAffinity(string "mask") -> bool`
+### `SetProcessAffinity(string "mask", bool "strictPrime") -> bool`
 Utility function setting the global process affinity mask for command-line batch encoding pipelines (`ffmpeg`, `avs2pipemod`).
 
 ---
@@ -54,14 +54,14 @@ Prefetch(8, 4)
 
 | Package | Architecture | Checksum Manifest |
 | :--- | :--- | :--- |
-| `AvsAffinity-v1.0.0-win-x64.zip` | Windows x86-64 | `AvsAffinity-v1.0.0-win-x64.sha256` |
-| `AvsAffinity-v1.0.0-win-arm64.zip` | Windows ARM64 (AArch64) | `AvsAffinity-v1.0.0-win-arm64.sha256` |
-| `AvsAffinity-v1.0.0-windows.zip` | Universal Bundle (`x64` + `ARM64`) | `AvsAffinity-v1.0.0-windows.sha256` |
+| `AvsAffinity-v1.1.0-win-x64.zip` | Windows x86-64 | `AvsAffinity-v1.1.0-win-x64.sha256` |
+| `AvsAffinity-v1.1.0-win-arm64.zip` | Windows ARM64 (AArch64) | `AvsAffinity-v1.1.0-win-arm64.sha256` |
+| `AvsAffinity-v1.1.0-windows.zip` | Universal Bundle (`x64` + `ARM64`) | `AvsAffinity-v1.1.0-windows.sha256` |
 
 ### Integrity Verification (PowerShell)
 ```powershell
 # Verify an individual archive against its companion checksum file
-$hash = (Get-FileHash AvsAffinity-v1.0.0-win-x64.zip -Algorithm SHA256).Hash.ToLower()
-$expected = (Get-Content AvsAffinity-v1.0.0-win-x64.sha256).Split(' *')[0].ToLower()
+$hash = (Get-FileHash AvsAffinity-v1.1.0-win-x64.zip -Algorithm SHA256).Hash.ToLower()
+$expected = (Get-Content AvsAffinity-v1.1.0-win-x64.sha256).Split(' *')[0].ToLower()
 if ($hash -eq $expected) { Write-Host "Checksum Verified" -ForegroundColor Green }
 ```

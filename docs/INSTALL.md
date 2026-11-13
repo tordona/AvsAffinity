@@ -8,12 +8,12 @@ This guide details deployment, installation, and integration workflows for `AvsA
 
 * **Operating System:** Windows 10 / Windows 11 (Version 1709 or newer for full `GetLogicalProcessorInformationEx` topology features).
 * **Architecture:** `x64` (x86-64 / AMD64) or `ARM64` (AArch64).
-* **AviSynth+ Runtime:** AviSynth+ v3.7.2 or newer (both 32-bit and 64-bit environments supported; 64-bit recommended for high-definition frame lookahead).
+* **AviSynth+ Runtime:** AviSynth+ v3.7.2 or newer (64-bit `x64` or `ARM64`).
 * **Target Hardware:** Hybrid multicore processors:
   * Intel Alder Lake (12th Gen), Raptor Lake (13th/14th Gen), Arrow Lake (15th Gen).
   * AMD Zen 4c / Zen 5c asymmetric CCD topologies.
   * Qualcomm Snapdragon 8cx Gen 1/2/3, Snapdragon 850, Snapdragon 7c Gen 2.
-  * *Note:* On homogeneous processors (Intel N100, AMD Ryzen standard CCDs, Snapdragon X Elite), the filter automatically detects uniform core efficiency and functions as a safe no-op.
+  * *Note:* On homogeneous processors (Intel N100, AMD Ryzen standard CCDs, Snapdragon X Elite), the filter detects uniform core efficiency and acts as a no-op.
 
 ---
 
